@@ -32,7 +32,7 @@ RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 RUN pip install comfy-cli
 
 # Install ComfyUI
-RUN /usr/bin/yes | comfy --workspace /comfyui install --nvidia --cuda-version 12.6 -N
+RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --cuda-version 12.6
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
