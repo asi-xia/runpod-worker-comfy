@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     python3.11-dev \
     python3-pip \
     git \
-    wget \
+    git-lfs \
     libgl1 \
     && ln -sf /usr/bin/python3.11 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
