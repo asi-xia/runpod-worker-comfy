@@ -36,6 +36,7 @@ RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --c
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
+RUN comfy node install comfyui_controlnet_aux ComfyUI_IPAdapter_plus ComfyUI-CogVideoXWrapper ComfyUI-Custom-Scripts ComfyUI-HunyuanVideoWrapper ComfyUI-Impact-Pack ComfyUI-Kolors-MZ comfyui-mixlab-nodes ComfyUI-VideoHelperSuite EasyAnimate rgthree-comfy was-node-suite-comfyui
 
 # Install runpod
 RUN pip install runpod requests
