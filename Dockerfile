@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install comfy-cli runpod requests opencv-python watchdog matplotlib
 
 # Install ComfyUI
-RUN /usr/bin/yes | comfy --skip-prompt --workspace ~/data/comfyui install --nvidia --cuda-version 12.6
+RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --cuda-version 12.6
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
