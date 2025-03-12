@@ -19,6 +19,7 @@ RUN apt update && apt install software-properties-common -y \
 RUN apt-get update && apt-get install -y \
     python3.11-dev \
     python3-pip \
+    python3-apt \
     git \
     git-lfs \
     libgl1 \
@@ -31,18 +32,15 @@ RUN apt-get update && apt-get install -y \
 # Clean up to reduce image size
 # RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-# Install comfy-cli
-RUN pip install comfy-cli
+# Install comfy-cli runpod
+RUN pip install comfy-cli runpod requests opencv-python watchdog matplotlib
 
 # Install ComfyUI
-RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --cuda-version 12.6
+RUN /usr/bin/yes | comfy --skip-prompt --workspace ~/data/comfyui install --nvidia --cuda-version 12.6
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 RUN comfy node install comfyui_controlnet_aux ComfyUI_IPAdapter_plus ComfyUI-CogVideoXWrapper ComfyUI-Custom-Scripts ComfyUI-HunyuanVideoWrapper ComfyUI-Impact-Pack ComfyUI-Kolors-MZ comfyui-mixlab-nodes ComfyUI-VideoHelperSuite EasyAnimate rgthree-comfy was-node-suite-comfyui
-
-# Install runpod
-RUN pip install runpod requests opencv-python watchdog matplotlib
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
