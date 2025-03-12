@@ -11,7 +11,8 @@ ENV PYTHONUNBUFFERED=1
 ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
 RUN apt update && apt install software-properties-common -y \
-    && add-apt-repository ppa:deadsnakes/ppa \
+    && add-apt-repository ppa:deadsnakes/ppa -y \
+    && add-apt-repository ppa:ubuntuhandbook1/ffmpeg6 -y \
     && apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev pkg-config -y
 
 # Install Python, git and other necessary tools
@@ -21,7 +22,9 @@ RUN apt-get update && apt-get install -y \
     git \
     git-lfs \
     libgl1 \
+    ffmpeg \
     && ln -sf /usr/bin/python3.11 /usr/bin/python \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python3 \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
     && git lfs install
 
@@ -39,7 +42,7 @@ WORKDIR /comfyui
 RUN comfy node install comfyui_controlnet_aux ComfyUI_IPAdapter_plus ComfyUI-CogVideoXWrapper ComfyUI-Custom-Scripts ComfyUI-HunyuanVideoWrapper ComfyUI-Impact-Pack ComfyUI-Kolors-MZ comfyui-mixlab-nodes ComfyUI-VideoHelperSuite EasyAnimate rgthree-comfy was-node-suite-comfyui
 
 # Install runpod
-RUN pip install runpod requests
+RUN pip install runpod requests opencv-python watchdog matplotlib
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
@@ -50,7 +53,7 @@ WORKDIR /
 # Add scripts
 ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
 RUN chmod +x /start.sh /restore_snapshot.sh
-
+RUN sed -i 's/\r$//' /start.sh
 # Start container
 CMD ["/start.sh"]
 
