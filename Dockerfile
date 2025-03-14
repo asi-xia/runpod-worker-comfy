@@ -40,7 +40,7 @@ RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --c
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
-RUN comfy node install comfyui_controlnet_aux ComfyUI_IPAdapter_plus ComfyUI-CogVideoXWrapper ComfyUI-Custom-Scripts ComfyUI-HunyuanVideoWrapper ComfyUI-Impact-Pack ComfyUI-Kolors-MZ comfyui-mixlab-nodes ComfyUI-VideoHelperSuite EasyAnimate rgthree-comfy was-node-suite-comfyui
+RUN comfy node registry-install comfyui_controlnet_aux comfyui_ipadapter_plus comfyui-cogvideoxwrapper comfyui-custom-scripts comfyui-hunyuanvideowrapper comfyui-impact-pack comfyui-kolors-mz comfyui-mixlab-nodes comfyui-videohelpersuite easyanimate rgthree-comfy was-node-suite-comfyui
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
