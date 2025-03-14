@@ -10,3 +10,11 @@ runpod_worker_comfy:
   upscale_models: models/upscale_models/
   vae: models/vae/
   unet: models/unet/
+  diffusers: models/diffusers/
+  diffusion_models: models/diffusion_models/
+  gligen: models/gligen/
+  hypernetworks: models/hypernetworks/
+  photomaker: models/photomaker/
+  style_models: models/style_models/
+  text_encoders: models/text_encoders/
+  vae_approx: models/vae_approx/
