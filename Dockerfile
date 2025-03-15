@@ -51,6 +51,7 @@ WORKDIR /
 ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json src/install_comfy_nodes.sh ./
 RUN chmod +x /start.sh /restore_snapshot.sh /install_comfy_nodes.sh \
     && sed -i 's/\r$//' /start.sh \
+    && sed -i 's/\r$//' /install_comfy_nodes.sh \
     && /install_comfy_nodes.sh
 # Start container
 CMD ["/start.sh"]
