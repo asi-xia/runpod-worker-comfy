@@ -40,9 +40,6 @@ RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --c
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
-ADD src/install_comfy_nodes.sh ./
-RUN chmod +x /comfyui/install_comfy_nodes.sh \
-    && /comfyui/install_comfy_nodes.sh
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
@@ -51,9 +48,10 @@ ADD src/extra_model_paths.yaml ./
 WORKDIR /
 
 # Add scripts
-ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
-RUN chmod +x /start.sh /restore_snapshot.sh \
-    && sed -i 's/\r$//' /start.sh
+ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json src/install_comfy_nodes.sh ./
+RUN chmod +x /start.sh /restore_snapshot.sh /install_comfy_nodes.sh \
+    && sed -i 's/\r$//' /start.sh \
+    && /install_comfy_nodes.sh
 # Start container
 CMD ["/start.sh"]
 
