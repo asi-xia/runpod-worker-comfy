@@ -41,8 +41,8 @@ RUN /usr/bin/yes | comfy --skip-prompt --workspace /comfyui install --nvidia --c
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 ADD src/install_comfy_nodes.sh ./
-RUN chmod +x /install_comfy_nodes.sh \
-    && /install_comfy_nodes.sh
+RUN chmod +x install_comfy_nodes.sh \
+    && install_comfy_nodes.sh
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
