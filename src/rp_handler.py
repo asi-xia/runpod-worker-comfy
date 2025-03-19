@@ -233,7 +233,7 @@ def process_output_images(outputs, job_id):
     COMFY_OUTPUT_PATH = os.environ.get("COMFY_OUTPUT_PATH", "/comfyui/output")
 
     output_images = {}
-
+    #Extract the path of the generated image or video
     for node_id, node_output in outputs.items():
         if "images" in node_output:
             for image in node_output["images"]:
@@ -329,8 +329,11 @@ def handler(job):
             history = get_history(prompt_id)
 
             # Exit the loop if we have found the history
-            if prompt_id in history and history[prompt_id].get("outputs"):
-                break
+            if prompt_id in history:
+                if history[prompt_id].get("outputs"):
+                    break
+                if history[prompt_id].get('status') and history[prompt_id]['status']['status_str'] == 'error':
+                    return {"error": "Errors encountered in the execution of tasks."}
             else:
                 # Wait before trying again
                 time.sleep(COMFY_POLLING_INTERVAL_MS / 1000)
