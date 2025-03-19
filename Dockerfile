@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
     && ln -sf /usr/bin/python3.11 /usr/bin/python \
     && ln -sf /usr/bin/python3.11 /usr/bin/python3 \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
+    && python -m pip install --upgrade pip \
     && git lfs install
 
 # Clean up to reduce image size
