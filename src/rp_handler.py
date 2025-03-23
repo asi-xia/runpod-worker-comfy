@@ -213,7 +213,7 @@ def process_output_images(outputs, job_id):
         job_id (str): The unique identifier for the job.
 
     Returns:
-        dict: A dictionary with the status ('success' or 'error') and the message,
+        dict: A dictionary with the state ('finished' or 'failed') and the message,
               which is either the URL to the image in the AWS S3 bucket or a base64
               encoded string of the image. In case of error, the message details the issue.
 
@@ -265,13 +265,14 @@ def process_output_images(outputs, job_id):
             )
 
         return {
-            "status": "success",
-            "message": image,
+            "state": "finished",
+            "file_url": image,
+            "message": "task is completed - the file was generated and uploaded to AWS S3",
         }
     else:
         print("runpod-worker-comfy - the image does not exist in the output folder")
         return {
-            "status": "error",
+            "state": "failed",
             "message": f"the image does not exist in the specified output folder: {local_image_path}",
         }
 
@@ -294,7 +295,7 @@ def handler(job):
     # Make sure that the input is valid
     validated_data, error_message = validate_input(job_input)
     if error_message:
-        return {"error": error_message}
+        return {"state": "failed", 'message': 'task execution failed', "error": error_message}
 
     # Extract validated data
     workflow = validated_data["workflow"]
@@ -319,7 +320,7 @@ def handler(job):
         prompt_id = queued_workflow["prompt_id"]
         print(f"runpod-worker-comfy - queued workflow with ID {prompt_id}")
     except Exception as e:
-        return {"error": f"Error queuing workflow: {str(e)}"}
+        return {"state": "failed", 'message': 'task execution failed', "error": f"Error queuing workflow: {str(e)}"}
 
     # Poll for completion
     print(f"runpod-worker-comfy - wait until image generation is complete")
@@ -333,15 +334,15 @@ def handler(job):
                 if history[prompt_id].get("outputs"):
                     break
                 if history[prompt_id].get('status') and history[prompt_id]['status']['status_str'] == 'error':
-                    return {"error": "Errors encountered in the execution of tasks."}
+                    return {"state": "failed", 'message': 'task execution failed', "error": "Errors encountered in the execution of tasks."}
             else:
                 # Wait before trying again
                 time.sleep(COMFY_POLLING_INTERVAL_MS / 1000)
                 retries += 1
         else:
-            return {"error": "Max retries reached while waiting for image generation"}
+            return {"state": "failed", 'message': 'task execution failed', "error": "Max retries reached while waiting for image generation"}
     except Exception as e:
-        return {"error": f"Error waiting for image generation: {str(e)}"}
+        return {"state": "failed", 'message': 'task execution failed', "error": f"Error waiting for image generation: {str(e)}"}
 
     # Get the generated image and return it as URL in an AWS bucket or as base64
     images_result = process_output_images(history[prompt_id].get("outputs"), job["id"])
